@@ -1,0 +1,16 @@
+service: password-strength
+frameworkVersion: '2'
+provider:
+  name: aws
+  runtime: nodejs12.x
+  lambdaHashingVersion: 20201221
+functions:
+  password:
+    handler: handler.password
+    events: 
+      - http:
+          path: password/{password}
+          method: get
+plugins:
+  - serverless-offline
+stage: dev

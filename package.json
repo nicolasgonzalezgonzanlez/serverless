@@ -1,0 +1,29 @@
+{
+  "name": "password",
+  "version": "1.0.0",
+  "description": "Serverless nodejs",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "sls offline start",
+    "deploy": "sls deploy",
+    "deleteInstance": "sls remove"
+  },
+  "main": "handler.js",
+  "dependencies": {
+    "querystring": "^0.2.1",
+    "serverless-offline": "^8.2.0",
+    "zxcvbn": "^4.4.2"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nicolasgonzalezgonzanlez/serverless.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nicolasgonzalezgonzanlez/serverless/issues"
+  },
+  "homepage": "https://github.com/nicolasgonzalezgonzanlez/serverless#readme"
+}
