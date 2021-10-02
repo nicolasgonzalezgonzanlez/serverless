@@ -12,6 +12,7 @@
   "dependencies": {
     "querystring": "^0.2.1",
     "serverless-offline": "^8.2.0",
+    "serverless-plugin-include-dependencies": "^5.0.0",
     "zxcvbn": "^4.4.2"
   },
   "devDependencies": {},

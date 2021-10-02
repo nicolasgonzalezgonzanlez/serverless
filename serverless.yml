@@ -13,4 +13,8 @@ functions:
           method: get
 plugins:
   - serverless-offline
+  - serverless-plugin-include-dependencies
+package:
+  patterns:
+    - '!node_modules/**'
 stage: dev
