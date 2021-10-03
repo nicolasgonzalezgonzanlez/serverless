@@ -1,7 +1,7 @@
 {
-  "name": "helloWord",
+  "name": "express-dynamodb",
   "version": "1.0.0",
-  "description": "",
+  "description": "Project serverless dynamodb aws",
   "main": "handler.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -9,11 +9,19 @@
     "deploy": "sls deploy",
     "deleteInstance": "sls remove"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nicolasgonzalezgonzanlez/serverless.git"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nicolasgonzalezgonzanlez/serverless/issues"
+  },
+  "homepage": "https://github.com/nicolasgonzalezgonzanlez/serverless#readme",
   "dependencies": {
-    "querystring": "^0.2.1",
-    "serverless-offline": "^8.2.0"
+    "express": "^4.17.1",
+    "serverless-http": "^2.7.0"
   }
 }

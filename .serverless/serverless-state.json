@@ -1,8 +1,8 @@
 {
   "service": {
-    "service": "helloWord",
+    "service": "express-dynamodb",
     "serviceObject": {
-      "name": "helloWord"
+      "name": "express-dynamodb"
     },
     "provider": {
       "name": "aws",
@@ -84,16 +84,10 @@
               }
             }
           },
-          "HelloLogGroup": {
+          "AppLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/helloWord-dev-hello"
-            }
-          },
-          "ShowUserLogGroup": {
-            "Type": "AWS::Logs::LogGroup",
-            "Properties": {
-              "LogGroupName": "/aws/lambda/helloWord-dev-showUser"
+              "LogGroupName": "/aws/lambda/express-dynamodb-dev-app"
             }
           },
           "IamRoleLambdaExecution": {
@@ -121,7 +115,7 @@
                     "Fn::Join": [
                       "-",
                       [
-                        "helloWord",
+                        "express-dynamodb",
                         "dev",
                         "lambda"
                       ]
@@ -138,7 +132,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/helloWord-dev*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/express-dynamodb-dev*:*"
                           }
                         ]
                       },
@@ -149,7 +143,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/helloWord-dev*:*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/express-dynamodb-dev*:*:*"
                           }
                         ]
                       }
@@ -162,7 +156,7 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "helloWord",
+                    "express-dynamodb",
                     "dev",
                     {
                       "Ref": "AWS::Region"
@@ -173,18 +167,18 @@
               }
             }
           },
-          "HelloLambdaFunction": {
+          "AppLambdaFunction": {
             "Type": "AWS::Lambda::Function",
             "Properties": {
               "Code": {
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/helloWord/dev/1633203108044-2021-10-02T19:31:48.044Z/helloWord.zip"
+                "S3Key": "serverless/express-dynamodb/dev/1633276592917-2021-10-03T15:56:32.917Z/express-dynamodb.zip"
               },
-              "Handler": "handler.hello",
+              "Handler": "handler.app",
               "Runtime": "nodejs12.x",
-              "FunctionName": "helloWord-dev-hello",
+              "FunctionName": "express-dynamodb-dev-app",
               "MemorySize": 1024,
               "Timeout": 6,
               "Role": {
@@ -195,58 +189,23 @@
               }
             },
             "DependsOn": [
-              "HelloLogGroup"
+              "AppLogGroup"
             ]
           },
-          "ShowUserLambdaFunction": {
-            "Type": "AWS::Lambda::Function",
-            "Properties": {
-              "Code": {
-                "S3Bucket": {
-                  "Ref": "ServerlessDeploymentBucket"
-                },
-                "S3Key": "serverless/helloWord/dev/1633203108044-2021-10-02T19:31:48.044Z/helloWord.zip"
-              },
-              "Handler": "handler.showUser",
-              "Runtime": "nodejs12.x",
-              "FunctionName": "helloWord-dev-showUser",
-              "MemorySize": 1024,
-              "Timeout": 6,
-              "Role": {
-                "Fn::GetAtt": [
-                  "IamRoleLambdaExecution",
-                  "Arn"
-                ]
-              }
-            },
-            "DependsOn": [
-              "ShowUserLogGroup"
-            ]
-          },
-          "HelloLambdaVersionAP4aQItgDUeX4qNtb41qj3GHdqF5mgMx8zlx3Aj44": {
+          "AppLambdaVersionYWSO2dVoq0oeyLPM0xOQqJtrt2Y1BVScM4yWI6JM": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
-                "Ref": "HelloLambdaFunction"
+                "Ref": "AppLambdaFunction"
               },
-              "CodeSha256": "1LbLxSd8mShsZeObEsturC9x6Jk8hOIhDEhTCUvJ/D0="
-            }
-          },
-          "ShowUserLambdaVersionXl77E0DndRBi0L08CoFR3bMJ3gluxoO8WlgwF2nE2Q": {
-            "Type": "AWS::Lambda::Version",
-            "DeletionPolicy": "Retain",
-            "Properties": {
-              "FunctionName": {
-                "Ref": "ShowUserLambdaFunction"
-              },
-              "CodeSha256": "1LbLxSd8mShsZeObEsturC9x6Jk8hOIhDEhTCUvJ/D0="
+              "CodeSha256": "lcR5KUNsST8bPXqKSgwyUxWeXlQ2p6mbYup0BQ5sWJQ="
             }
           },
           "ApiGatewayRestApi": {
             "Type": "AWS::ApiGateway::RestApi",
             "Properties": {
-              "Name": "dev-helloWord",
+              "Name": "dev-express-dynamodb",
               "EndpointConfiguration": {
                 "Types": [
                   "EDGE"
@@ -255,7 +214,7 @@
               "Policy": ""
             }
           },
-          "ApiGatewayResourceHolaDashmundo": {
+          "ApiGatewayResourceProxyVar": {
             "Type": "AWS::ApiGateway::Resource",
             "Properties": {
               "ParentId": {
@@ -264,46 +223,22 @@
                   "RootResourceId"
                 ]
               },
-              "PathPart": "hola-mundo",
+              "PathPart": "{proxy+}",
               "RestApiId": {
                 "Ref": "ApiGatewayRestApi"
               }
             }
           },
-          "ApiGatewayResourceHolaDashmundoNameVar": {
-            "Type": "AWS::ApiGateway::Resource",
-            "Properties": {
-              "ParentId": {
-                "Ref": "ApiGatewayResourceHolaDashmundo"
-              },
-              "PathPart": "{name}",
-              "RestApiId": {
-                "Ref": "ApiGatewayRestApi"
-              }
-            }
-          },
-          "ApiGatewayResourceUser": {
-            "Type": "AWS::ApiGateway::Resource",
-            "Properties": {
-              "ParentId": {
-                "Fn::GetAtt": [
-                  "ApiGatewayRestApi",
-                  "RootResourceId"
-                ]
-              },
-              "PathPart": "user",
-              "RestApiId": {
-                "Ref": "ApiGatewayRestApi"
-              }
-            }
-          },
-          "ApiGatewayMethodHolaDashmundoNameVarGet": {
+          "ApiGatewayMethodAny": {
             "Type": "AWS::ApiGateway::Method",
             "Properties": {
-              "HttpMethod": "GET",
+              "HttpMethod": "ANY",
               "RequestParameters": {},
               "ResourceId": {
-                "Ref": "ApiGatewayResourceHolaDashmundoNameVar"
+                "Fn::GetAtt": [
+                  "ApiGatewayRestApi",
+                  "RootResourceId"
+                ]
               },
               "RestApiId": {
                 "Ref": "ApiGatewayRestApi"
@@ -328,7 +263,7 @@
                       ":lambda:path/2015-03-31/functions/",
                       {
                         "Fn::GetAtt": [
-                          "HelloLambdaFunction",
+                          "AppLambdaFunction",
                           "Arn"
                         ]
                       },
@@ -340,16 +275,16 @@
               "MethodResponses": []
             },
             "DependsOn": [
-              "HelloLambdaPermissionApiGateway"
+              "AppLambdaPermissionApiGateway"
             ]
           },
-          "ApiGatewayMethodUserPost": {
+          "ApiGatewayMethodProxyVarAny": {
             "Type": "AWS::ApiGateway::Method",
             "Properties": {
-              "HttpMethod": "POST",
+              "HttpMethod": "ANY",
               "RequestParameters": {},
               "ResourceId": {
-                "Ref": "ApiGatewayResourceUser"
+                "Ref": "ApiGatewayResourceProxyVar"
               },
               "RestApiId": {
                 "Ref": "ApiGatewayRestApi"
@@ -374,7 +309,7 @@
                       ":lambda:path/2015-03-31/functions/",
                       {
                         "Fn::GetAtt": [
-                          "ShowUserLambdaFunction",
+                          "AppLambdaFunction",
                           "Arn"
                         ]
                       },
@@ -386,10 +321,10 @@
               "MethodResponses": []
             },
             "DependsOn": [
-              "ShowUserLambdaPermissionApiGateway"
+              "AppLambdaPermissionApiGateway"
             ]
           },
-          "ApiGatewayDeployment1633203075560": {
+          "ApiGatewayDeployment1633276587066": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -398,53 +333,16 @@
               "StageName": "dev"
             },
             "DependsOn": [
-              "ApiGatewayMethodHolaDashmundoNameVarGet",
-              "ApiGatewayMethodUserPost"
+              "ApiGatewayMethodAny",
+              "ApiGatewayMethodProxyVarAny"
             ]
           },
-          "HelloLambdaPermissionApiGateway": {
+          "AppLambdaPermissionApiGateway": {
             "Type": "AWS::Lambda::Permission",
             "Properties": {
               "FunctionName": {
                 "Fn::GetAtt": [
-                  "HelloLambdaFunction",
-                  "Arn"
-                ]
-              },
-              "Action": "lambda:InvokeFunction",
-              "Principal": "apigateway.amazonaws.com",
-              "SourceArn": {
-                "Fn::Join": [
-                  "",
-                  [
-                    "arn:",
-                    {
-                      "Ref": "AWS::Partition"
-                    },
-                    ":execute-api:",
-                    {
-                      "Ref": "AWS::Region"
-                    },
-                    ":",
-                    {
-                      "Ref": "AWS::AccountId"
-                    },
-                    ":",
-                    {
-                      "Ref": "ApiGatewayRestApi"
-                    },
-                    "/*/*"
-                  ]
-                ]
-              }
-            }
-          },
-          "ShowUserLambdaPermissionApiGateway": {
-            "Type": "AWS::Lambda::Permission",
-            "Properties": {
-              "FunctionName": {
-                "Fn::GetAtt": [
-                  "ShowUserLambdaFunction",
+                  "AppLambdaFunction",
                   "Arn"
                 ]
               },
@@ -483,25 +381,16 @@
               "Ref": "ServerlessDeploymentBucket"
             },
             "Export": {
-              "Name": "sls-helloWord-dev-ServerlessDeploymentBucketName"
+              "Name": "sls-express-dynamodb-dev-ServerlessDeploymentBucketName"
             }
           },
-          "HelloLambdaFunctionQualifiedArn": {
+          "AppLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "HelloLambdaVersionAP4aQItgDUeX4qNtb41qj3GHdqF5mgMx8zlx3Aj44"
+              "Ref": "AppLambdaVersionYWSO2dVoq0oeyLPM0xOQqJtrt2Y1BVScM4yWI6JM"
             },
             "Export": {
-              "Name": "sls-helloWord-dev-HelloLambdaFunctionQualifiedArn"
-            }
-          },
-          "ShowUserLambdaFunctionQualifiedArn": {
-            "Description": "Current Lambda function version",
-            "Value": {
-              "Ref": "ShowUserLambdaVersionXl77E0DndRBi0L08CoFR3bMJ3gluxoO8WlgwF2nE2Q"
-            },
-            "Export": {
-              "Name": "sls-helloWord-dev-ShowUserLambdaFunctionQualifiedArn"
+              "Name": "sls-express-dynamodb-dev-AppLambdaFunctionQualifiedArn"
             }
           },
           "ServiceEndpoint": {
@@ -527,7 +416,7 @@
               ]
             },
             "Export": {
-              "Name": "sls-helloWord-dev-ServiceEndpoint"
+              "Name": "sls-express-dynamodb-dev-ServiceEndpoint"
             }
           }
         }
@@ -616,48 +505,25 @@
       },
       "vpc": {}
     },
-    "plugins": [
-      "serverless-offline"
-    ],
     "pluginsData": {},
     "functions": {
-      "hello": {
-        "handler": "handler.hello",
+      "app": {
+        "handler": "handler.app",
         "events": [
           {
-            "http": {
-              "path": "hola-mundo/{name}",
-              "method": "get",
-              "integration": "AWS_PROXY"
-            }
+            "http": "ANY /"
+          },
+          {
+            "http": "ANY {proxy+}"
           }
         ],
-        "name": "helloWord-dev-hello",
+        "name": "express-dynamodb-dev-app",
         "package": {},
         "memory": 1024,
         "timeout": 6,
         "runtime": "nodejs12.x",
         "vpc": {},
-        "versionLogicalId": "HelloLambdaVersionAP4aQItgDUeX4qNtb41qj3GHdqF5mgMx8zlx3Aj44"
-      },
-      "showUser": {
-        "handler": "handler.showUser",
-        "events": [
-          {
-            "http": {
-              "path": "user",
-              "method": "post",
-              "integration": "AWS_PROXY"
-            }
-          }
-        ],
-        "name": "helloWord-dev-showUser",
-        "package": {},
-        "memory": 1024,
-        "timeout": 6,
-        "runtime": "nodejs12.x",
-        "vpc": {},
-        "versionLogicalId": "ShowUserLambdaVersionXl77E0DndRBi0L08CoFR3bMJ3gluxoO8WlgwF2nE2Q"
+        "versionLogicalId": "AppLambdaVersionYWSO2dVoq0oeyLPM0xOQqJtrt2Y1BVScM4yWI6JM"
       }
     },
     "configValidationMode": "warn",
@@ -672,17 +538,14 @@
       },
       "functions": {
         "$ref": "$[\"service\"][\"functions\"]"
-      },
-      "plugins": {
-        "$ref": "$[\"service\"][\"plugins\"]"
       }
     },
     "layers": {},
     "isDashboardMonitoringPreconfigured": false,
-    "artifact": "C:\\Users\\Nicolas\\Desktop\\avalith\\awsTests\\helloWord\\.serverless\\helloWord.zip"
+    "artifact": "C:\\Users\\Nicolas\\Desktop\\avalith\\awsTests\\helloWord\\.serverless\\express-dynamodb.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/helloWord/dev/1633203108044-2021-10-02T19:31:48.044Z",
-    "artifact": "helloWord.zip"
+    "artifactDirectoryName": "serverless/express-dynamodb/dev/1633276592917-2021-10-03T15:56:32.917Z",
+    "artifact": "express-dynamodb.zip"
   }
 }
