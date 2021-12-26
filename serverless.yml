@@ -1,12 +1,20 @@
 service: express-dynamodb
+disabledDeprecations:
+  - CODE_1 # To disable specific deprecation with code "CODE_1"
+  - '*' # To disable all deprecation messages
 custom:
-  tableName: 'users-table-${self:provider.stage}'
-frameworkVersion: '2'
+  stage: ${opt:stage, self:provider.stage}
+  # Set the table name here so we can use it while testing locally
+  tableName: ${self:custom.stage}-testUser
+
+plugins:
+  - serverless-offline
 
 provider:
   name: aws
   runtime: nodejs12.x
   lambdaHashingVersion: 20201221
+  stage: dev
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -17,9 +25,10 @@ provider:
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
       Resource:
-        - { "Fn:GetAtt": ["UsersDynamoDBTable", "Arn"] }
+        - "Fn::GetAtt": ["UserDynamoDBTable", "Arn"]
   environment:
-    USERS_TABLE: ${self:custom.tableName}
+    tableName: ${self:custom.tableName}
+
 
 functions:
   app:
@@ -30,10 +39,9 @@ functions:
 
 resources:
   Resources:
-    usersTable:
-      Type: AWS::DynamoDB::Table
+    UserDynamoDBTable:
+      Type: 'AWS::DynamoDB::Table'
       Properties:
-        TableName: ${self:custom.tableName}
         AttributeDefinitions:
           - AttributeName: userId
             AttributeType: S
@@ -43,3 +51,4 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+        TableName: ${self:custom.tableName}

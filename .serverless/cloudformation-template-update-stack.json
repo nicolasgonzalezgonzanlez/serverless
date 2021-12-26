@@ -133,6 +133,25 @@
                       "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/express-dynamodb-dev*:*:*"
                     }
                   ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "dynamodb:Query",
+                    "dynamodb:Scan",
+                    "dynamodb:GetItem",
+                    "dynamodb:PutItem",
+                    "dynamodb:UpdateItem",
+                    "dynamodb:DeleteItem"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::GetAtt": [
+                        "UserDynamoDBTable",
+                        "Arn"
+                      ]
+                    }
+                  ]
                 }
               ]
             }
@@ -161,13 +180,18 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/express-dynamodb/dev/1633276592917-2021-10-03T15:56:32.917Z/express-dynamodb.zip"
+          "S3Key": "serverless/express-dynamodb/dev/1640549227427-2021-12-26T20:07:07.427Z/express-dynamodb.zip"
         },
         "Handler": "handler.app",
         "Runtime": "nodejs12.x",
         "FunctionName": "express-dynamodb-dev-app",
         "MemorySize": 1024,
         "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "tableName": "dev-testUser"
+          }
+        },
         "Role": {
           "Fn::GetAtt": [
             "IamRoleLambdaExecution",
@@ -179,14 +203,14 @@
         "AppLogGroup"
       ]
     },
-    "AppLambdaVersionYWSO2dVoq0oeyLPM0xOQqJtrt2Y1BVScM4yWI6JM": {
+    "AppLambdaVersionUwWEoPMQQ8uqDSUxcfP1cSyF2MNx1QCW3bHHcb7vYA": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "AppLambdaFunction"
         },
-        "CodeSha256": "lcR5KUNsST8bPXqKSgwyUxWeXlQ2p6mbYup0BQ5sWJQ="
+        "CodeSha256": "cJnJ/KSDM9PpVfLTBQmhAzGrSDsayk2JFIH1qGsxE/I="
       }
     },
     "ApiGatewayRestApi": {
@@ -311,7 +335,7 @@
         "AppLambdaPermissionApiGateway"
       ]
     },
-    "ApiGatewayDeployment1633276587066": {
+    "ApiGatewayDeployment1640549211946": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -360,6 +384,28 @@
           ]
         }
       }
+    },
+    "UserDynamoDBTable": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "userId",
+            "AttributeType": "S"
+          }
+        ],
+        "KeySchema": [
+          {
+            "AttributeName": "userId",
+            "KeyType": "HASH"
+          }
+        ],
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": 1,
+          "WriteCapacityUnits": 1
+        },
+        "TableName": "dev-testUser"
+      }
     }
   },
   "Outputs": {
@@ -374,7 +420,7 @@
     "AppLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "AppLambdaVersionYWSO2dVoq0oeyLPM0xOQqJtrt2Y1BVScM4yWI6JM"
+        "Ref": "AppLambdaVersionUwWEoPMQQ8uqDSUxcfP1cSyF2MNx1QCW3bHHcb7vYA"
       },
       "Export": {
         "Name": "sls-express-dynamodb-dev-AppLambdaFunctionQualifiedArn"
