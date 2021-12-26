@@ -25,8 +25,24 @@ function insertUser(data) {
     });
   });
 }
+function getOneUser(userId) {
+  return new Promise((resolve, reject) => {
+    const params = {
+      TableName,
+      Key: {
+        userId: userId
+      }
+    };
+    DB.get(params, (err, response) => {
+      console.log(response)
+      if (err) reject( { status: 400, message: 'No se ha encontrar el usuario' })
+      else resolve( { status: 200, message: response })
+    });
+  });
+}
 
 module.exports = {
   getAllUser,
-  insertUser
+  insertUser,
+  getOneUser
 }

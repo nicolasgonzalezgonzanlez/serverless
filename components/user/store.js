@@ -19,8 +19,16 @@ const getAllUser = async () => {
   }
 };
 
-
+const getOneUser = async (user) => {
+  try {
+    const DBResponse = await userDB.getOneUser(user)
+    return DBResponse;
+  } catch (err) {
+    return { status: 400, message: err };
+  }
+};
 module.exports = {
   createdUser,
-  getAllUser
+  getAllUser,
+  getOneUser
 }
