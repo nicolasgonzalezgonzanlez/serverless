@@ -1,7 +1,8 @@
 const store = require('./store')
-const getCashinCompanies = async (req, res, next) => {
+const getUser = async (req, res, next) => {
   try {
-    res.status(200).json({message:'cashinCompanies'});
+    const db = await store.getAllUser()
+    res.status(200).json(db);
   } catch (error) {
     next(error);
   }
@@ -20,6 +21,6 @@ const postUser = async (req, res, next) => {
 
 
 module.exports = {
-  getCashinCompanies,
+  getUser,
   postUser
 };

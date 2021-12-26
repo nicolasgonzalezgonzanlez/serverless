@@ -1,7 +1,7 @@
 const controller = require('./controller')
 
 const  router = (app) => {
-  app.get('/user', controller.getCashinCompanies)
+  app.get('/users', controller.getUser)
   app.post('/user', controller.postUser)
 }
 
